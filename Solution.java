@@ -1,6 +1,7 @@
 import javafx.util.Pair; 
 class Solution {
     public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+        // Build the graph that store the equations
         HashMap<String, HashMap<String,Double>> Division_map = new HashMap();
         for(int i=0; i<equations.length; i++){
             if(Division_map.get(equations[i][0]) == null){
@@ -16,6 +17,7 @@ class Solution {
         }
         //System.out.println(Division_map);
         
+        // Using dfs to get the evaluation
         double[] res = new double[queries.length];
         for(int i=0; i<queries.length; i++){
             double v = dfs(queries[i][0], queries[i][1], Division_map, 1.0, new HashSet<String>());
@@ -39,11 +41,11 @@ class Solution {
                 }
             }
             for(Map.Entry<String, Double> entry : Division_map.get(str).entrySet()){
-                if(!Traversed.contains(entry.getKey())){
+                if(!Traversed.contains(entry.getKey())){    // avoid traverse cyclic graph
                     double temp = dfs(entry.getKey(),end,Division_map,v*entry.getValue(), Traversed);
                     if(temp>0){
                         return temp;
-                    }
+                    }// if return -1 then keep traverse
                 }
             }
         }
